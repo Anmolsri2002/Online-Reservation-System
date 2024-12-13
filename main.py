@@ -1,12 +1,21 @@
 
 #IMPORT PACKAGES AND IMPORT DATABASE
+import os
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 import sqlite3
 import pandas as pd
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key'  # Required for session management
-conn = sqlite3.connect('railway.db', check_same_thread=False)
+app.secret_key = os.environ.get('SECRET_KEY', 'your_secret_key')
+
+# Database configuration
+DATABASE_URL = os.environ.get('DATABASE_URL', 'railway.db')
+
+def get_db_connection():
+    conn = sqlite3.connect(DATABASE_URL, check_same_thread=False)
+    return conn
+
+conn = get_db_connection()
 c = conn.cursor()
 
 
