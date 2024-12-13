@@ -1,0 +1,188 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cancel Ticket</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+                        url('https://images.unsplash.com/photo-1474487548417-781cb71495f3');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 2.5rem;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .form-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 3rem;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            width: 100%;
+            max-width: 500px;
+            margin: 20px auto;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        input:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        button {
+            padding: 1rem;
+            background: rgba(255, 99, 99, 0.3);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: bold;
+            margin-top: 0.5rem;
+        }
+
+        button:hover {
+            background: rgba(255, 99, 99, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .message {
+            text-align: center;
+            padding: 1rem;
+            margin: 1rem 0;
+            background: rgba(40, 167, 69, 0.2);
+            border-radius: 8px;
+            border: 1px solid rgba(40, 167, 69, 0.3);
+            display: none;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        a {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            margin-top: 1.5rem;
+        }
+
+        a:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .form-container {
+                padding: 2rem;
+                margin: 1rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            input, button {
+                padding: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Cancel Ticket</h1>
+    
+    <div class="form-container">
+        <form method="POST" id="cancelForm">
+            <input type="text" name="train_number" placeholder="Train Number" required>
+            <input type="number" name="seat_number" placeholder="Seat Number" required>
+            <button type="submit" onclick="showCancelMessage(event)">Cancel Ticket</button>
+        </form>
+    </div>
+
+    <div id="cancelMessage" class="message"></div>
+
+    <div>
+        <a href="{{ url_for('index') }}">Back</a>
+    </div>
+
+    <script>
+        function showCancelMessage(event) {
+            event.preventDefault();
+            const message = document.getElementById('cancelMessage');
+            message.style.display = 'block';
+            message.innerHTML = 'Processing cancellation...';
+
+            setTimeout(() => {
+                document.getElementById('cancelForm').submit();
+            }, 1000);
+        }
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                const message = document.getElementById('cancelMessage');
+                message.style.display = 'block';
+                message.innerHTML = "{{ messages[0] }}";
+                setTimeout(() => {
+                    message.style.display = 'none';
+                }, 3000);
+            {% endif %}
+        {% endwith %}
+    </script>
+</body>
+</html>

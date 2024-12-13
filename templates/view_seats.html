@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>View Seats for {{ train_number }}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+                        url('https://images.unsplash.com/photo-1474487548417-781cb71495f3');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: white;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 4rem auto;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        #viewSeatsForm {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        input[type="text"] {
+            padding: 0.8rem 1.2rem;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1rem;
+            margin-right: 1rem;
+            width: 200px;
+        }
+
+        input[type="text"]::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .seat-button {
+            padding: 0.8rem 1.2rem;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            text-decoration: none;
+        }
+
+        .seat-button:hover:not([disabled]) {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .seat-button[disabled] {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        th {
+            background: rgba(255, 255, 255, 0.2);
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .booked {
+            background: rgba(255, 99, 99, 0.2);
+        }
+
+        .available {
+            background: rgba(99, 255, 99, 0.2);
+        }
+
+        tr:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .message {
+            text-align: center;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+            background: rgba(40, 167, 69, 0.2);
+            border: 1px solid rgba(40, 167, 69, 0.3);
+            display: none;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            input[type="text"] {
+                width: 100%;
+                margin-bottom: 1rem;
+            }
+
+            table {
+                font-size: 0.9rem;
+            }
+
+            th, td {
+                padding: 0.8rem 0.5rem;
+            }
+
+            .seat-button {
+                padding: 0.8rem;
+            }
+        }
+        h1{
+            text-align: center;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>View Seats</h1>
+    <div class="container">
+        <div id="viewSeatsForm">
+            <form method="POST" id="seatForm">
+                <input type="text" name="train_number" id="trainNumber" required placeholder="Enter Train Number">
+                <button type="submit" class="seat-button" onclick="showSeats(event)">View Seats</button>
+            </form>
+        </div>
+
+        <div id="message" class="message"></div>
+        
+        <div id="seatsContainer">
+            {% if seats %}
+                <h2>Seats for Train {{ train_number }}</h2>
+                <table>
+                    <tr>
+                        <th>Seat Number</th>
+                        <th>Seat Type</th>
+                        <th>Passenger Name</th>
+                        <th>Age</th>
+                        <th>Gender</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                    {% for seat in seats %}
+                    <tr class="{{ 'booked' if seat[5] else 'available' }}">
+                        <td>{{ seat[0] }}</td>
+                        <td>{{ seat[1] }}</td>
+                        <td>{{ seat[2] if seat[2] else '-' }}</td>
+                        <td>{{ seat[3] if seat[3] else '-' }}</td>
+                        <td>{{ seat[4] if seat[4] else '-' }}</td>
+                        <td>{{ 'Booked' if seat[5] else 'Available' }}</td>
+                        <td>
+                            {% if not seat[5] %}
+                                <button class="seat-button" onclick="bookSeat('{{ seat[0] }}')">Book</button>
+                            {% else %}
+                                <button class="seat-button" disabled>Booked</button>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            {% endif %}
+        </div>
+
+        <div class="back-link">
+            <a href="{{ url_for('index') }}" class="seat-button">Back to Home</a>
+        </div>
+    </div>
+
+    <script>
+        
+        function showSeats(event) {
+            event.preventDefault();
+            const trainNumber = document.getElementById('trainNumber').value;
+            if (!trainNumber) {
+                alert('Please enter a train number');
+                return;
+            }
+            document.getElementById('seatForm').submit();
+        }
+
+        function bookSeat(seatNumber) {
+            const message = document.getElementById('message');
+            message.style.display = 'block';
+            message.innerHTML = `Booking seat ${seatNumber}...`;
+            
+            // Simulate booking process
+            setTimeout(() => {
+                message.innerHTML = `Seat ${seatNumber} has been booked successfully!`;
+                // Disable the button and update the row
+                const button = event.target;
+                button.disabled = true;
+                button.innerHTML = 'Booked';
+                button.parentElement.parentElement.classList.remove('available');
+                button.parentElement.parentElement.classList.add('booked');
+            }, 1000);
+        }
+
+        // Show flash messages if any
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                const message = document.getElementById('message');
+                message.style.display = 'block';
+                message.innerHTML = "{{ messages[0] }}";
+                setTimeout(() => {
+                    message.style.display = 'none';
+                }, 3000);
+            {% endif %}
+        {% endwith %}
+    </script>
+</body>
+</html>

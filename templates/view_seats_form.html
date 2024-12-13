@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>View Seats</title>
+</head>
+<body>
+    <h1>View Seats</h1>
+    <form method="POST">
+        <input type="text" name="train_number" placeholder="Train Number" required>
+        <button type="submit">View Seats</button>
+    </form>
+    <a href="{{ url_for('index') }}">Back</a>
+</body>
+</html>

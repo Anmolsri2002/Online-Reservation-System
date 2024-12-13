@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Train Management System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-image: url('https://images.unsplash.com/photo-1474487548417-781cb71495f3');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+
+        .overlay {
+            background-color: rgba(0, 0, 0, 0.7);
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 1rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-title {
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .main-content {
+            padding-top: 100px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-bottom: 2rem;
+        }
+
+        .admin-section {
+            background-color: rgba(255, 255, 255, 0.2); /* Changed to 0.2 opacity */
+            backdrop-filter: blur(8px); /* Adds a blur effect behind the transparent div */
+            padding: 2rem;
+            border-radius: 10px;
+            margin: 10rem auto;
+            max-width: 500px;
+            border: 1px solid rgba(255, 255, 255, 0.3); /* Adds a subtle border */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+        }
+    
+        .section-title {
+            color: white; /* Changed to white for better visibility */
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Adds text shadow for better readability */
+        }
+    
+        /* Update button styles for better visibility on transparent background */
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            text-align: center;
+            backdrop-filter: blur(4px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+    
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            opacity: 0.9;
+        }
+    
+        /* Optional: Add a glass-like effect to buttons */
+        .btn-primary {
+            background-color: rgba(0, 123, 255, 0.8);
+            color: white;
+        }
+    
+        .btn-success {
+            background-color: rgba(40, 167, 69, 0.8);
+            color: white;
+        }
+    
+        .btn-danger {
+            background-color: rgba(220, 53, 69, 0.8);
+            color: white;
+        }
+
+        .admin-buttons {
+            display: grid;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+
+        @media (max-width: 768px) {
+            .nav-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-buttons {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .admin-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay">
+        <nav class="navbar">
+            <div class="nav-content">
+                <h1 class="nav-title">Online Reservation System</h1>
+                <div class="nav-buttons">
+                    <button onclick="window.location.href='{{ url_for('book_ticket') }}'" class="btn btn-primary">Book Ticket</button>
+                    <button onclick="window.location.href='{{ url_for('view_seats') }}'" class="btn btn-success">View Seats</button>
+                    <button onclick="window.location.href='{{ url_for('cancel_ticket') }}'" class="btn btn-danger">Cancel Ticket</button>
+                </div>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <section class="admin-section">
+                <h2 class="section-title">Train Administration</h2>
+                <div class="admin-buttons">
+                    <button onclick="window.location.href='{{ url_for('add_train_route') }}'" class="btn btn-primary">Add Train</button>
+                    <button onclick="window.location.href='{{ url_for('view_trains') }}'" class="btn btn-success">View Trains</button>
+                    <button onclick="window.location.href='{{ url_for('search_train') }}'" class="btn btn-primary">Search Train</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // Add smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
